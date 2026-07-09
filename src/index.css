@@ -1,0 +1,219 @@
+:root {
+  --bg: #0a0a0b;
+  --bg-2: #111113;
+  --paper: #ededef;
+  --paper-2: rgba(237, 237, 239, 0.72);
+  --paper-3: rgba(237, 237, 239, 0.55);
+  --hairline: rgba(237, 237, 239, 0.14);
+  --blue: #3b5bdb;
+  --blue-bright: #6786f2;
+  --display: "Kanit", "Archivo", -apple-system, sans-serif;
+  --sans: "Archivo", -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --cjk: "Songti SC", "Kaiti SC", "Noto Serif CJK TC", "PMingLiU", serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+body {
+  background: var(--bg);
+  color: var(--paper);
+  font-family: var(--sans);
+  font-size: 1rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+p,
+figure,
+blockquote,
+dl,
+dd {
+  margin: 0;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: inherit;
+}
+
+::selection {
+  background: rgba(59, 91, 219, 0.45);
+  color: var(--paper);
+}
+
+:focus-visible {
+  outline: 2px solid var(--blue-bright);
+  outline-offset: 3px;
+}
+
+/* ---- skip link ---- */
+
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 1rem;
+  z-index: 200;
+  background: var(--blue);
+  color: #fff;
+  font-family: var(--sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 0.8rem 1.2rem;
+}
+
+.skip-link:focus-visible {
+  top: 1rem;
+}
+
+/* ---- eyebrow labels ---- */
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--blue-bright);
+}
+
+.eyebrow::before {
+  content: "";
+  width: 2.25rem;
+  height: 1px;
+  background: var(--blue);
+  opacity: 0.9;
+}
+
+.eyebrow--center::after {
+  content: "";
+  width: 2.25rem;
+  height: 1px;
+  background: var(--blue);
+  opacity: 0.9;
+}
+
+/* CJK kicker sitting beside an eyebrow label */
+
+.eyebrow .kicker {
+  font-family: var(--cjk);
+  font-size: 0.85rem;
+  font-weight: 400;
+  letter-spacing: 0.3em;
+  color: var(--paper-3);
+  transform: translateY(-0.05em);
+}
+
+/* ---- buttons ---- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 0.95rem 1.55rem;
+  border: 1px solid transparent;
+}
+
+.btn--solid {
+  background: var(--blue);
+  color: #fff;
+}
+
+.btn--solid:hover,
+.btn--solid:focus-visible {
+  background: #4c6ce4;
+}
+
+.btn--ghost {
+  border-color: rgba(237, 237, 239, 0.35);
+  color: var(--paper);
+}
+
+.btn--ghost:hover,
+.btn--ghost:focus-visible {
+  border-color: rgba(237, 237, 239, 0.75);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .btn {
+    transition:
+      background-color 0.25s ease,
+      border-color 0.25s ease;
+  }
+}
+
+/* ---- scroll reveal ----
+   Elements are fully visible by default; the hidden initial state and
+   transition exist only when the user allows motion. */
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(32px);
+    filter: blur(10px);
+    will-change: opacity, transform, filter;
+    transition:
+      opacity 1.05s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 1.05s cubic-bezier(0.22, 1, 0.36, 1),
+      filter 1.05s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  [data-reveal].is-visible {
+    opacity: 1;
+    transform: none;
+    filter: blur(0);
+  }
+
+  .d1 {
+    transition-delay: 0.1s;
+  }
+
+  .d2 {
+    transition-delay: 0.2s;
+  }
+
+  .d3 {
+    transition-delay: 0.3s;
+  }
+
+  .d4 {
+    transition-delay: 0.42s;
+  }
+}

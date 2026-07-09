@@ -1,0 +1,230 @@
+/* ---- kit cards ---- */
+
+.jerseys {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  margin-top: clamp(2rem, 4vw, 3rem);
+}
+
+.jerseys__card {
+  appearance: none;
+  border: 1px solid var(--hairline);
+  background: var(--bg-2);
+  padding: clamp(1.25rem, 2.5vw, 2rem) clamp(1rem, 2vw, 1.5rem) 1.1rem;
+  cursor: zoom-in;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.1rem;
+}
+
+.jerseys__card img {
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.55));
+}
+
+.jerseys__card:hover,
+.jerseys__card:focus-visible {
+  border-color: var(--blue);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .jerseys__card {
+    transition: border-color 0.25s ease, transform 0.25s ease;
+  }
+
+  .jerseys__card:hover {
+    transform: translateY(-4px);
+  }
+}
+
+.jerseys__name {
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--paper-2);
+}
+
+.jerseys__name em {
+  font-style: normal;
+  color: var(--blue-bright);
+  margin-left: 0.3rem;
+}
+
+@media (max-width: 720px) {
+  .jerseys {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---- zoom viewer ---- */
+
+.jviewer {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  background: rgba(8, 8, 10, 0.95);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+.jviewer__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem clamp(1.25rem, 4vw, 2.5rem);
+}
+
+.jviewer__title {
+  font-family: var(--display);
+  font-size: clamp(1rem, 1.8vw, 1.3rem);
+  font-style: italic;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--paper);
+}
+
+.jviewer__stage {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  touch-action: none;
+}
+
+.jviewer__stage.is-dragging {
+  cursor: grabbing;
+}
+
+.jviewer__stage img {
+  max-width: min(86vw, 900px);
+  max-height: 72vh;
+  user-select: none;
+  will-change: transform;
+  filter: drop-shadow(0 24px 48px rgba(0, 0, 0, 0.6));
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .jviewer {
+    animation: jviewer-fade 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .jviewer__fade-up {
+    opacity: 0;
+    transform: translateY(18px);
+    animation: jviewer-fade-up 0.48s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+
+  .jviewer__bar {
+    animation-delay: 0.04s;
+  }
+
+  .jviewer__stage {
+    animation-delay: 0.1s;
+  }
+
+  .jviewer__controls {
+    animation-delay: 0.16s;
+  }
+
+  .jviewer__stage img:not(.is-dragging) {
+    transition:
+      transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+      filter 0.28s ease-out;
+  }
+
+  .jviewer__stage img {
+    animation: jviewer-image-in 0.52s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  @keyframes jviewer-fade {
+    from {
+      opacity: 0;
+      backdrop-filter: blur(0);
+      -webkit-backdrop-filter: blur(0);
+    }
+    to {
+      opacity: 1;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+  }
+
+  @keyframes jviewer-fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes jviewer-image-in {
+    from {
+      opacity: 0;
+      transform: scale(0.96);
+      filter: drop-shadow(0 12px 26px rgba(0, 0, 0, 0.38));
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+      filter: drop-shadow(0 24px 48px rgba(0, 0, 0, 0.6));
+    }
+  }
+}
+
+.jviewer__controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1.1rem 1rem 1.6rem;
+}
+
+.jviewer__btn {
+  appearance: none;
+  background: transparent;
+  border: 1px solid rgba(237, 237, 239, 0.3);
+  color: var(--paper);
+  font-family: var(--display);
+  font-size: 1.05rem;
+  line-height: 1;
+  width: 2.6rem;
+  height: 2.6rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.jviewer__btn--reset {
+  width: auto;
+  padding-inline: 0.9rem;
+  font-size: 0.78rem;
+  font-style: italic;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.jviewer__btn:hover,
+.jviewer__btn:focus-visible {
+  border-color: var(--blue);
+  color: var(--blue-bright);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .jviewer__btn {
+    transition: border-color 0.2s ease, color 0.2s ease;
+  }
+}
