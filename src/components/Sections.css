@@ -20,7 +20,7 @@
       rgba(10, 10, 11, 0.08) 88%,
       rgba(10, 10, 11, 0.18) 100%
     ),
-    url("../assets/bamboo-side.webp");
+    url("../assets/bamboo-side.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -74,11 +74,22 @@
 
 .team__photo {
   margin-top: 0;
+  overflow: hidden;
 }
 
 .team__photo img {
   width: 100%;
   border: 1px solid var(--hairline);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .team__photo img {
+    transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .team__photo:hover img {
+    transform: scale(1.015);
+  }
 }
 
 .team__photo figcaption {
@@ -120,6 +131,49 @@
     transition:
       filter 0.45s ease,
       transform 0.45s ease;
+  }
+
+  /* cascade: the grid wrapper carries data-reveal, tiles ripple in.
+     The wrapper's own reveal styling is neutralised so only the
+     children animate. */
+  .gallery[data-reveal] {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    transition: none;
+  }
+
+  .gallery[data-reveal] .gallery__tile {
+    opacity: 0;
+    transform: translateY(30px) scale(0.98);
+    transition:
+      opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .gallery[data-reveal].is-visible .gallery__tile {
+    opacity: 1;
+    transform: none;
+  }
+
+  .gallery[data-reveal] .gallery__tile:nth-child(2) {
+    transition-delay: 0.08s;
+  }
+
+  .gallery[data-reveal] .gallery__tile:nth-child(3) {
+    transition-delay: 0.16s;
+  }
+
+  .gallery[data-reveal] .gallery__tile:nth-child(4) {
+    transition-delay: 0.24s;
+  }
+
+  .gallery[data-reveal] .gallery__tile:nth-child(5) {
+    transition-delay: 0.32s;
+  }
+
+  .gallery[data-reveal] .gallery__tile:nth-child(6) {
+    transition-delay: 0.4s;
   }
 }
 
@@ -252,13 +306,84 @@
   border-top: 1px solid var(--hairline);
 }
 
+.results__row {
+  position: relative;
+}
+
+/* blue score-bar that grows in from the left on hover */
+.results__row::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: -1px;
+  bottom: 0;
+  width: 2px;
+  background: var(--blue);
+  transform: scaleY(0);
+  transform-origin: top;
+}
+
 .results__row:hover {
   background: rgba(255, 255, 255, 0.03);
+}
+
+.results__row:hover::before {
+  transform: scaleY(1);
+}
+
+.results__row:hover .results__order {
+  color: var(--blue-bright);
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .results__row {
     transition: background-color 0.25s ease;
+  }
+
+  .results__row::before {
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .results__order {
+    transition: color 0.25s ease;
+  }
+
+  /* cascade the rows in, one after another */
+  .results__list[data-reveal] {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    transition: none;
+  }
+
+  .results__list[data-reveal] .results__row {
+    opacity: 0;
+    transform: translateX(-26px);
+    transition:
+      opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+      background-color 0.25s ease;
+  }
+
+  .results__list[data-reveal].is-visible .results__row {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* per-property delays so the entrance staggers without
+     lagging the hover background */
+  .results__list[data-reveal] .results__row:nth-child(2) {
+    transition:
+      opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.12s,
+      transform 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.12s,
+      background-color 0.25s ease;
+  }
+
+  .results__list[data-reveal] .results__row:nth-child(3) {
+    transition:
+      opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.24s,
+      transform 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.24s,
+      background-color 0.25s ease;
   }
 }
 

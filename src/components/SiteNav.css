@@ -65,6 +65,7 @@
 }
 
 .site-nav__links a {
+  position: relative;
   font-family: var(--sans);
   font-size: 0.7rem;
   font-weight: 500;
@@ -74,12 +75,33 @@
   text-decoration: none;
 }
 
+/* blue underline grows from the left on hover */
+.site-nav__links a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0.18em; /* optical: ignore the tracking after the last letter */
+  bottom: -7px;
+  height: 1px;
+  background: var(--blue-bright);
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
 .site-nav__links a:hover,
 .site-nav__links a:focus-visible {
   color: var(--paper);
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 6px;
+}
+
+.site-nav__links a:hover::after,
+.site-nav__links a:focus-visible::after {
+  transform: scaleX(1);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .site-nav__links a::after {
+    transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+  }
 }
 
 .site-nav__join {

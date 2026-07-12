@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import SiteNav from "./components/SiteNav";
 import Hero from "./components/Hero";
+import Ticker from "./components/Ticker";
 import {
   TeamSection,
   GallerySection,
@@ -33,8 +34,28 @@ export default function App() {
       { threshold: 0.1, rootMargin: "0px 0px -10% 0px" },
     );
 
+    // reveal anything already on screen immediately — first paint
+    // should never wait on the observer's first tick
+    const bootstrap = () => {
+      const vh =
+        window.innerHeight || document.documentElement.clientHeight || 800;
+      els.forEach((el) => {
+        const r = el.getBoundingClientRect();
+        if (r.top < vh * 0.92 && r.bottom > 0) el.classList.add("is-visible");
+      });
+    };
+    bootstrap();
+
     els.forEach((el) => io.observe(el));
-    return () => io.disconnect();
+
+    // …and once more after the observer's initial pass settles, in case
+    // that first delivery ran against a mid-load layout
+    const t = window.setTimeout(bootstrap, 300);
+
+    return () => {
+      window.clearTimeout(t);
+      io.disconnect();
+    };
   }, []);
 
   return (
@@ -45,6 +66,7 @@ export default function App() {
       <SiteNav />
       <main id="main">
         <Hero />
+        <Ticker />
         <TeamSection />
         <GallerySection />
         <JerseysSection />

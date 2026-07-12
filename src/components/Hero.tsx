@@ -8,14 +8,37 @@ import "./Hero.css";
 export default function Hero() {
   const [loaded, setLoaded] = useState(false);
   const imgRef = useRef<HTMLImageElement>(null);
+  const mediaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (imgRef.current?.complete) setLoaded(true);
   }, []);
 
+  // scroll parallax on the photo — the panda recedes slower than the page
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const media = mediaRef.current;
+    if (!media) return;
+    let last = -1;
+    const onScroll = () => {
+      const vh =
+        window.innerHeight || document.documentElement.clientHeight || 800;
+      const y = window.scrollY;
+      if (y > vh * 1.3) return; // hero is off screen
+      const offset = Math.round(Math.min(y * 0.18, vh * 0.18));
+      if (offset === last) return;
+      last = offset;
+      media.style.transform = `translate3d(0, ${-offset}px, 0)`;
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
     <section className="hero" id="top" aria-labelledby="hero-title">
       <div
+        ref={mediaRef}
         className="hero__media"
         style={{ backgroundImage: `url(${heroBlur})` }}
       >
@@ -39,16 +62,14 @@ export default function Hero() {
       </p>
 
       <div className="hero__inner">
-        <img className="hero__crest" src={crest} alt="" data-reveal="" />
-        <p className="eyebrow d1" data-reveal="">
+        <img className="hero__crest" src={crest} alt="" />
+        <p className="eyebrow hero__eyebrow">
           NACIVT nine-man volleyball · Canada
         </p>
-        <h1 id="hero-title" className="hero__title" data-reveal="" data-d="1">
+        <h1 id="hero-title" className="hero__title">
           Pandas Volleyball<em>.</em>
         </h1>
-        <p className="hero__tag d2" data-reveal="">
-          Established 2025.
-        </p>
+        <p className="hero__est">Established 2025</p>
       </div>
     </section>
   );

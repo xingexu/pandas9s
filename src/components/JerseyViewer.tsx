@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import jerseyBlack from "../assets/jersey-black.png";
 import jerseyBlue from "../assets/jersey-blue.png";
 import jerseyWhite from "../assets/jersey-white.png";
@@ -101,6 +102,25 @@ export default function JerseyViewer() {
 
   const jersey = open === null ? null : JERSEYS[open];
 
+  // pointer-tracking 3D tilt on the kit cards (mouse only)
+  const handleTilt = (e: React.PointerEvent<HTMLButtonElement>) => {
+    if (e.pointerType !== "mouse") return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const el = e.currentTarget;
+    const r = el.getBoundingClientRect();
+    const px = (e.clientX - r.left) / r.width - 0.5;
+    const py = (e.clientY - r.top) / r.height - 0.5;
+    el.style.setProperty("--tilt-x", `${(py * -7).toFixed(2)}deg`);
+    el.style.setProperty("--tilt-y", `${(px * 9).toFixed(2)}deg`);
+    el.style.setProperty("--shine-x", `${((px + 0.5) * 100).toFixed(1)}%`);
+  };
+
+  const resetTilt = (e: React.PointerEvent<HTMLButtonElement>) => {
+    const el = e.currentTarget;
+    el.style.setProperty("--tilt-x", "0deg");
+    el.style.setProperty("--tilt-y", "0deg");
+  };
+
   return (
     <>
       <div className="jerseys" data-reveal="">
@@ -110,6 +130,8 @@ export default function JerseyViewer() {
             type="button"
             className="jerseys__card"
             onClick={() => { setOpen(i); reset(); }}
+            onPointerMove={handleTilt}
+            onPointerLeave={resetTilt}
           >
             <img src={j.src} alt={`${j.name} Pandas jersey, front and back`} loading="lazy" />
             <span className="jerseys__name">
@@ -119,7 +141,7 @@ export default function JerseyViewer() {
         ))}
       </div>
 
-      {jersey && (
+      {jersey && createPortal(
         <div
           className="jviewer"
           role="dialog"
@@ -183,7 +205,8 @@ export default function JerseyViewer() {
               ›
             </button>
           </div>
-        </div>
+        </div>,
+        document.body,
       )}
     </>
   );

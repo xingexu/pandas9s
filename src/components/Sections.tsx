@@ -96,7 +96,7 @@ export function GallerySection() {
             相册
           </span>
         </p>
-        <h2 className="section-title d1" id="gallery-title" data-reveal="">
+        <h2 className="section-title" id="gallery-title" data-reveal="wipe">
           From the court<em>.</em>
         </h2>
         <div className="gallery" data-reveal="">
@@ -136,7 +136,7 @@ export function JerseysSection() {
             球衣
           </span>
         </p>
-        <h2 className="section-title d1" id="jerseys-title" data-reveal="">
+        <h2 className="section-title" id="jerseys-title" data-reveal="wipe">
           The kits<em>.</em>
         </h2>
         <p className="jerseys__intro d2" data-reveal="">
@@ -160,7 +160,7 @@ export function ResultsSection() {
         <p className="eyebrow" data-reveal="">
           Tournaments
         </p>
-        <h2 className="section-title d1" id="results-title" data-reveal="">
+        <h2 className="section-title" id="results-title" data-reveal="wipe">
           Results<em>.</em>
         </h2>
         <ol className="results__list" data-reveal="">

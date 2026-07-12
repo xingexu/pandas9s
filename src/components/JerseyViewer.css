@@ -32,11 +32,93 @@
 
 @media (prefers-reduced-motion: no-preference) {
   .jerseys__card {
-    transition: border-color 0.25s ease, transform 0.25s ease;
+    position: relative;
+    overflow: hidden;
+    transform: perspective(950px) rotateX(var(--tilt-x, 0deg))
+      rotateY(var(--tilt-y, 0deg)) translateY(var(--lift, 0px));
+    transition:
+      border-color 0.25s ease,
+      transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   .jerseys__card:hover {
-    transform: translateY(-4px);
+    --lift: -5px;
+  }
+
+  /* blue spotlight that follows the cursor across the card */
+  .jerseys__card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      420px circle at var(--shine-x, 50%) 20%,
+      rgba(103, 134, 242, 0.16),
+      transparent 65%
+    );
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    pointer-events: none;
+  }
+
+  .jerseys__card:hover::after,
+  .jerseys__card:focus-visible::after {
+    opacity: 1;
+  }
+
+  /* kits gently float at rest, out of phase with each other */
+  .jerseys__card img {
+    animation: kit-float 6s ease-in-out infinite;
+  }
+
+  .jerseys__card:nth-child(2) img {
+    animation-delay: 1.1s;
+  }
+
+  .jerseys__card:nth-child(3) img {
+    animation-delay: 2.2s;
+  }
+
+  @keyframes kit-float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-8px);
+    }
+  }
+
+  /* cascade in — wrapper carries data-reveal, cards ripple */
+  .jerseys[data-reveal] {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    transition: none;
+  }
+
+  .jerseys[data-reveal] .jerseys__card {
+    opacity: 0;
+    transform: translateY(34px);
+    transition:
+      opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 0.25s ease;
+  }
+
+  .jerseys[data-reveal].is-visible .jerseys__card {
+    opacity: 1;
+    transform: perspective(950px) rotateX(var(--tilt-x, 0deg))
+      rotateY(var(--tilt-y, 0deg)) translateY(var(--lift, 0px));
+  }
+
+  /* stagger via travel distance, not delay — a delay here would
+     also lag the pointer tilt */
+  .jerseys[data-reveal]:not(.is-visible) .jerseys__card:nth-child(2) {
+    transform: translateY(58px);
+  }
+
+  .jerseys[data-reveal]:not(.is-visible) .jerseys__card:nth-child(3) {
+    transform: translateY(84px);
   }
 }
 

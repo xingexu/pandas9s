@@ -1,0 +1,64 @@
+.ticker {
+  overflow: hidden;
+  border-block: 1px solid var(--hairline);
+  background: var(--bg);
+  padding: 0.85rem 0;
+  user-select: none;
+}
+
+.ticker__track {
+  display: flex;
+  width: max-content;
+}
+
+.ticker__group {
+  display: flex;
+  align-items: baseline;
+  flex: none;
+}
+
+.ticker__item {
+  display: inline-flex;
+  align-items: baseline;
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 700;
+  font-size: clamp(1.05rem, 2vw, 1.45rem);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--paper);
+  white-space: nowrap;
+}
+
+/* alternating outlined words, like jersey numerals */
+.ticker__item--ghost {
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(237, 237, 239, 0.38);
+}
+
+.ticker__item i {
+  font-style: normal;
+  -webkit-text-stroke: 0;
+  color: var(--blue-bright);
+  margin-inline: 1.1rem;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .ticker__track {
+    animation: ticker-scroll 30s linear infinite;
+    will-change: transform;
+  }
+
+  .ticker:hover .ticker__track {
+    animation-play-state: paused;
+  }
+
+  @keyframes ticker-scroll {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+}

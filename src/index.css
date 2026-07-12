@@ -173,9 +173,65 @@ a {
 
 @media (prefers-reduced-motion: no-preference) {
   .btn {
+    position: relative;
+    overflow: hidden;
     transition:
       background-color 0.25s ease,
-      border-color 0.25s ease;
+      border-color 0.25s ease,
+      color 0.25s ease,
+      transform 0.25s ease;
+  }
+
+  .btn:hover {
+    transform: translateY(-2px);
+  }
+
+  .btn:active {
+    transform: translateY(0);
+  }
+
+  /* shine sweep across the solid button */
+  .btn--solid::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 40%;
+    background: linear-gradient(
+      105deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.35) 50%,
+      transparent 100%
+    );
+    transform: translateX(-160%) skewX(-18deg);
+    transition: transform 0.55s ease;
+    pointer-events: none;
+  }
+
+  .btn--solid:hover::after,
+  .btn--solid:focus-visible::after {
+    transform: translateX(400%) skewX(-18deg);
+  }
+
+  /* blue fill wipe on the ghost button */
+  .btn--ghost {
+    background-image: linear-gradient(var(--blue), var(--blue));
+    background-repeat: no-repeat;
+    background-size: 0% 100%;
+    background-position: left center;
+    transition:
+      background-size 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 0.25s ease,
+      color 0.25s ease,
+      transform 0.25s ease;
+  }
+
+  .btn--ghost:hover,
+  .btn--ghost:focus-visible {
+    background-size: 100% 100%;
+    border-color: var(--blue);
+    color: #fff;
   }
 }
 
@@ -215,5 +271,34 @@ a {
 
   .d4 {
     transition-delay: 0.42s;
+  }
+
+  /* wipe variant — big display titles slide out of a clipped box,
+     like a broadcast lower-third. Keyframes (not transitions) so the
+     effect replays cleanly each time the class lands. */
+  [data-reveal="wipe"] {
+    opacity: 0;
+    transform: none;
+    filter: none;
+    transition: none;
+  }
+
+  [data-reveal="wipe"].is-visible {
+    opacity: 1;
+    filter: none;
+    animation: reveal-wipe 0.95s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  @keyframes reveal-wipe {
+    from {
+      opacity: 0;
+      clip-path: inset(-8% 100% -14% 0);
+      transform: translateX(-18px);
+    }
+    to {
+      opacity: 1;
+      clip-path: inset(-8% -8% -14% 0);
+      transform: translateX(0);
+    }
   }
 }
